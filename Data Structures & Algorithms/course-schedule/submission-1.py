@@ -1,0 +1,26 @@
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        
+        from collections import defaultdict
+
+        def cycle(course, seen):
+            if course in seen:
+                return True
+            seen.add(course)
+            for p in adj_lst[course]:
+                if cycle(p, seen):
+                    return True 
+            seen.remove(course)
+            adj_lst[course] = []
+            return False
+
+        adj_lst = defaultdict(list)
+        for c, p in prerequisites:
+            adj_lst[c].append(p)
+        
+        seen = set()
+
+        for course in range(numCourses):
+            if cycle(course, seen):
+                return False 
+        return True 
